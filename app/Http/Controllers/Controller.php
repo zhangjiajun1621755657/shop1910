@@ -9,5 +9,8 @@ use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    public function hello(){
+        echo __METHOD__;
+        echo date("Y-m-d h:i:s");
+    }
 }
