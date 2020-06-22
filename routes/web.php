@@ -22,3 +22,10 @@ Route::get('/test/redis1',"TestController@redis1");
 Route::get('/goods/detail',"Goods\GoodsController@detail");//商品详情
 
 
+Route::get('/user/reg',"user\IndexController@reg");//前台注册
+Route::post('/user/regDo',"user\IndexController@regDo");//前台注册
+Route::get('/user/login',"user\IndexController@login");//前台用户登录
+Route::post('/user/login',"user\IndexController@loginDo");//前台用户登录
+Route::get('/user/center',"user\IndexController@center");//用户中心
+
+
