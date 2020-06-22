@@ -16,5 +16,9 @@ Route::get('/', function () {
 });
 
 Route::get('/test/hello',"TestController@hello");
+Route::get('/test/redis1',"TestController@redis1");
 
-Route::get('/goods/detail',"Goods\GoodsController@detail");
+
+Route::get('/goods/detail',"Goods\GoodsController@detail");//商品详情
+
+
