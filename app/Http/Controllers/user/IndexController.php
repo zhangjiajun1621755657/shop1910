@@ -88,7 +88,7 @@ class IndexController extends Controller
             //向客户端设置cookie
 //            setcookie('uid',$u->user_id,time()+3600,'/');
 //            setcookie('uname',$u->user_name,time()+3600,'/');
-            Cookie::queue('uid2',$u->user_id,10);
+            Cookie::queue('uid',$u->user_id,10);
             header('Refresh:2;url=/user/center');
             echo '登录成功';
         }else{
@@ -102,16 +102,16 @@ class IndexController extends Controller
         //判断用户是否登录,判断是否有uid以及name字段
         //echo '<pre>';print_r($_COOKIE);echo '</pre>';
 
-        $res = Cookie::has('uid2');
-        var_dump($res);
+//        $res = Cookie::has('uid2');
+//        var_dump($res);
 
 
-//        if(isset($_COOKIE['uid']) && isset($_COOKIE['uname'])){
-//            return view('user.center');
-//        }else{
-//            echo '未登录';die;
-//            return redirect('/user/login');
-//        }
+        if(Cookie::has('uid')){
+            return view('user.center');
+        }else{
+
+            return redirect('/user/login');
+        }
 
     }
 
