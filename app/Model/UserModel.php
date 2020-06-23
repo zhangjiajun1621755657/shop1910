@@ -8,4 +8,5 @@ class UserModel extends Model
 {
     public $table = 'p_users';
     protected $primaryKey = 'user_id';
+    //protected $fillable = "false";
 }
