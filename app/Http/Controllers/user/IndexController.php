@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Model\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Redis;
+use Illuminate\Support\Facades\Cookie;
 class IndexController extends Controller
 {
     //注册视图
@@ -84,6 +85,10 @@ class IndexController extends Controller
         //验证密码
         $res = password_verify($pass,$u->password);
         if($res){
+            //向客户端设置cookie
+//            setcookie('uid',$u->user_id,time()+3600,'/');
+//            setcookie('uname',$u->user_name,time()+3600,'/');
+            Cookie::queue('uid2',$u->user_id,10);
             header('Refresh:2;url=/user/center');
             echo '登录成功';
         }else{
@@ -93,7 +98,21 @@ class IndexController extends Controller
     }
 
     public function center(){
-        return view('user.center');
+
+        //判断用户是否登录,判断是否有uid以及name字段
+        //echo '<pre>';print_r($_COOKIE);echo '</pre>';
+
+        $res = Cookie::has('uid2');
+        var_dump($res);
+
+
+//        if(isset($_COOKIE['uid']) && isset($_COOKIE['uname'])){
+//            return view('user.center');
+//        }else{
+//            echo '未登录';die;
+//            return redirect('/user/login');
+//        }
+
     }
 
 }
