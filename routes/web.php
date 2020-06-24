@@ -33,3 +33,7 @@ Route::post('/user/login',"user\IndexController@loginDo");//前台用户登录
 Route::get('/user/center',"user\IndexController@center");//用户中心
 
 
+//API
+Route::post('/api/user/reg',"Api\UserController@reg");//注册
+
+
