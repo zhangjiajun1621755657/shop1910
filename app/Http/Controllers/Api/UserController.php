@@ -119,7 +119,11 @@ class UserController extends Controller
 
             //将token保存在redis中
             $key = $token;
-            Redis::set($key,$u->user_id);
+
+
+           // Redis::expire($token,20);
+
+
 
             $response = [
                 'errno'=>0,
