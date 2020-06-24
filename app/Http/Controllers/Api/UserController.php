@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Model\TokenModel;
 use Illuminate\Http\Request;
 use App\Model\UserModel;
+use Illuminate\Support\Facades\Redis;
+
 class UserController extends Controller
 {
 
@@ -112,8 +114,12 @@ class UserController extends Controller
                 'token'=>$token
             ];
 
+            //保存token到数据库
             TokenModel::insert($data);
 
+            //将token保存在redis中
+            $key = $token;
+            Redis::set($key,$u->user_id);
 
             $response = [
                 'errno'=>0,
@@ -135,13 +141,12 @@ class UserController extends Controller
         //判断用户是否登录,判断是否有uid以及name字段
         $token = $_GET['token'];
 
-        $res = TokenModel::where('token',$token)->first();
+        $uid = Redis::get($token);
 
-        if($res){
-            $uid = $res->uid;
+        if($uid){
+
             $user_info = UserModel::find($uid);
-
-           echo $user_info->user_name .  '欢迎来到个人中心!';
+            echo $user_info->user_name .  '欢迎来到个人中心!';
         }else{
            echo '请登录';
         }
