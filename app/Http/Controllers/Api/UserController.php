@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Model\TokenModel;
 use Illuminate\Http\Request;
 use App\Model\UserModel;
 class UserController extends Controller
@@ -83,5 +84,67 @@ class UserController extends Controller
             ];
             return $response;
         }
+    }
+
+
+    /**
+     * 执行登录
+     */
+    public function login(Request $request){
+        $name = $request->input('name');
+        $pass = $request->input('password');
+
+        //验证登录信息
+        $u = UserModel::where(['user_name'=>$name])->first();
+
+
+        //验证密码
+        $res = password_verify($pass,$u->password);
+        if($res){
+
+            //生成token
+            $str = $u->user_id . $u->user_name . time();
+            $token = substr(md5($str),10,16);
+
+            //保存token,后续验证使用
+            $data = [
+                'uid'=>$u->user_id,
+                'token'=>$token
+            ];
+
+            TokenModel::insert($data);
+
+
+            $response = [
+                'errno'=>0,
+                'msg'=>'ok',
+                'token'=>$token
+            ];
+        }else{
+            $response = [
+                'errno'=>50006,
+                'msg'=>'ok',
+                'token'=>'用户名与密码不一致,请重新登录'
+            ];
+        }
+        return $response;
+    }
+
+    public function center(){
+
+        //判断用户是否登录,判断是否有uid以及name字段
+        $token = $_GET['token'];
+
+        $res = TokenModel::where('token',$token)->first();
+
+        if($res){
+            $uid = $res->uid;
+            $user_info = UserModel::find($uid);
+
+           echo $user_info->user_name .  '欢迎来到个人中心!';
+        }else{
+           echo '请登录';
+        }
+
     }
 }
