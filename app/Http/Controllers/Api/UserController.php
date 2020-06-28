@@ -108,22 +108,8 @@ class UserController extends Controller
             $str = $u->user_id . $u->user_name . time();
             $token = substr(md5($str),10,16);
 
-            //保存token,后续验证使用
-            $data = [
-                'uid'=>$u->user_id,
-                'token'=>$token
-            ];
-
-            //保存token到数据库
-            TokenModel::insert($data);
-
             //将token保存在redis中
-            $key = $token;
-
-
-           // Redis::expire($token,20);
-
-
+            Redis::set($token,$u->user_id);
 
             $response = [
                 'errno'=>0,
@@ -143,7 +129,17 @@ class UserController extends Controller
     public function center(){
 
         //判断用户是否登录,判断是否有uid以及name字段
-        $token = $_GET['token'];
+
+        if(isset($_GET['token'])){
+            $token = $_GET['token'];
+        }else{
+            $response = [
+                'errno'=>50007,
+                'msg'=>'请先登录'
+            ];
+            return $response;
+        }
+
 
         $uid = Redis::get($token);
 
@@ -152,8 +148,93 @@ class UserController extends Controller
             $user_info = UserModel::find($uid);
             echo $user_info->user_name .  '欢迎来到个人中心!';
         }else{
-           echo '请登录';
+            $response = [
+                'errno'=>50008,
+                'msg'=>'请先登录'
+            ];
+            return $response;
         }
 
+    }
+
+    public function orders(){
+
+        //鉴权
+        if(isset($_GET['token'])){
+            $token = $_GET['token'];
+            //验证token是否有效
+            $uid = Redis::get($token);
+            if($uid){
+
+            }else{
+                $response = [
+                    'errno'=>50008,
+                    'msg'=>'请先登录'
+                ];
+                return $response;
+            }
+
+        }else{
+            $response = [
+                'errno'=>50007,
+                'msg'=>'请先登录'
+            ];
+            return $response;
+        }
+
+        $arr = [
+            '0987657890621123',
+            '0984567890621123',
+            '0987654568621123',
+            '0987657890121123'
+        ];
+
+        $response = [
+            'errno'=>0,
+            'msg'=>'ok',
+            'data'=>[
+                'oredrs'=>$arr
+            ]
+        ];
+        return $response;
+    }
+
+    public function cart(){
+
+        if(!isset($_GET['token'])){
+            $response = [
+                'errno'=>50007,
+                'msg'=>'请先登录'
+            ];
+            return $response;
+        }
+
+        //鉴权
+        $token = $_GET['token'];
+        //验证token是否有效
+        $uid = Redis::get($token);
+        if($uid){
+
+        }else{
+            $response = [
+                'errno'=>50008,
+                'msg'=>'请先登录'
+            ];
+            return $response;
+        }
+
+        $goods = [
+            123,
+            456,
+            789
+        ];
+
+        $response = [
+            'errno'=>0,
+            'msg'=>'ok',
+            'data'=>$goods
+        ];
+
+        return $response;
     }
 }
