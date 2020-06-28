@@ -40,6 +40,11 @@ Route::get('/api/user/center',"Api\UserController@center")->middleware('check.pr
 Route::get('/api/my/orders',"Api\UserController@orders")->middleware('check.pri');//我的订单
 Route::get('/api/my/cart',"Api\UserController@cart")->middleware('check.pri');//我的购物车
 
-Route::get('/api/a',"Api\TestController@a")->middleware('check.pri');//
-Route::get('/api/b',"Api\TestController@b");//
-Route::get('/api/c',"Api\TestController@c");//
+
+
+//中间件防刷路由组
+Route::middleware('check.pri','zjj.fs')->group(function(){
+    Route::get('/api/a',"Api\TestController@a");
+    Route::get('/api/b',"Api\TestController@b");
+    Route::get('/api/c',"Api\TestController@c");
+});
