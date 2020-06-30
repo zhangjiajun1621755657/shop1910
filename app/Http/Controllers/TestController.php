@@ -189,7 +189,7 @@ class TestController extends Controller
      * 非对称加密
      */
     public function rsaEncrypt1(){
-        $data = "天王盖地虎";  //代价密数据
+        $data = "天王盖地虎";  //待加密数据
         //使用公钥加密
         $key_content = file_get_contents(storage_path('keys/pub.key')); //读取公钥内容
         $pub_key = openssl_get_publickey($key_content);
