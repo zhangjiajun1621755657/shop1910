@@ -231,4 +231,19 @@ class TestController extends Controller
        openssl_private_decrypt($enc_data,$dec_data,$key);
        echo $dec_data;die;
    }
+
+    public function rsaSign1(){
+        $data = '天王盖地虎';
+        //使用私钥签名
+        $key = openssl_get_privatekey(file_get_contents(storage_path('keys/a_priv.key')));
+        openssl_sign($data,$sign,$key);
+
+       // $data = urlencode($data); //url参数处理
+        $sign_str = urlencode(base64_encode($sign));
+
+        $url = 'http://api.1910.com/rsa/verify1?data='.$data.'&sign='.$sign_str;
+
+        $response = file_get_contents($url);
+        echo $response;
+    }
 }

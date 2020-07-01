@@ -30,6 +30,7 @@ Route::prefix('/test')->group(function(){
     Route::get('/rsa/encrypt1',"TestController@rsaEncrypt1"); //非对称加密
 
     Route::get('/rsa/send-b',"TestController@sendB"); //非对称加密
+    Route::get('/rsaSign1/',"TestController@rsaSign1"); //非对称加密
 });
 
 
