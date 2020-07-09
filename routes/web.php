@@ -48,7 +48,8 @@ Route::get('/user/center',"user\IndexController@center");//用户中心
 
 
 //API
-Route::post('/api/user/reg',"Api\UserController@reg");//注册
+Route::get('/api/user/reg1',"Api\UserController@reg1");//注册
+Route::get('/api/user/reg',"Api\UserController@reg");//注册
 Route::post('/api/user/login',"Api\UserController@login");//登录
 Route::get('/api/user/center',"Api\UserController@center")->middleware('check.pri');//个人中心
 Route::get('/api/my/orders',"Api\UserController@orders")->middleware('check.pri');//我的订单
@@ -62,3 +63,11 @@ Route::middleware('check.pri','zjj.fs')->group(function(){
     Route::get('/api/b',"Api\TestController@b");
     Route::get('/api/c',"Api\TestController@c");
 });
+
+
+
+Route::get('/cs/zc',"Cs\UserController@zc");  //前台注册
+Route::post('/cs/zc2',"Cs\UserController@zc2");  //前台注册
+Route::get('/cs/login',"Cs\UserController@login");  //前台登录
+Route::post('/cs/loginDo',"Cs\UserController@loginDo");  //前台登录逻辑
+Route::post('/cs/centent',"Cs\UserController@centent");  //前台登录逻辑

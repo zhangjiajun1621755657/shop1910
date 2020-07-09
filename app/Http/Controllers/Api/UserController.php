@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Redis;
 class UserController extends Controller
 {
 
-//    //注册视图
-//    public function reg(){
-//        return view('user.reg');
-//    }
+    //注册视图
+    public function reg1(){
+        return view('user.reg');
+    }
 
     /**
      * 注册用户
@@ -66,6 +66,7 @@ class UserController extends Controller
 
         //生成密码
         $pass = password_hash($pass1,PASSWORD_BCRYPT);
+        //var_dump($pass);die;
         $data = [
             'user_name'=>$name,
             'email'=> $email,
