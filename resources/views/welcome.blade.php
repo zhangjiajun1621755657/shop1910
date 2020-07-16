@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    APP
+                    1910-{{env('APP_ENV')}}
                 </div>
 
                 <div class="links">

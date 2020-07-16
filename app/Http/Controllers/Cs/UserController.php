@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Model\CsModel;
 use App\TokenModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
 {
@@ -24,6 +25,10 @@ class UserController extends Controller
       $pass1 = $request->input(['user_pwd']);
       $pass2 = $request->input(['user_pwd2']);
 
+        $u_name = CsModel::where(['user_name'=>$user_name])->first();
+        if($u_name){
+            echo '用户名已存在';die;
+        }
 
         if($pass1<6){
             echo '密码长度大于六位';die;
@@ -46,17 +51,9 @@ class UserController extends Controller
 
         $res = CsModel::create($data);
         if($res){
-            $response= [
-                'errno'=>50000,
-                'msg'=>"注册成功"
-            ];
-            return $response;
+          echo '注册成功';
         }else{
-            $response= [
-                'errno'=>500002,
-                'msg'=>"注册失败"
-            ];
-            return $response;
+          echo '注册失败';
         }
     }
 
@@ -68,35 +65,22 @@ class UserController extends Controller
     public function loginDo(Request $request){
       $user_name = $request->input(['user_name']);
       $user_pwd = $request->input(['user_pwd']);
-      $data = CsModel::where(['user_name'=>$user_name,'user_pwd'=>$user_pwd])->first();
+      $data = CsModel::where(['user_name'=>$user_name])->first();
 
         //验证密码
-       // $res = password_verify($user_pwd,$data->password);
-      if($data){
-
+        $res = password_verify($user_pwd,$data->user_pwd);
+      if($res){
           $str = $data->user_id . $data->user_name .time();
           $token = sha1($str);
-          $res  = TokenModel::create($token);
-          if($res){
-              echo "成功";
-          }else{
-              echo "失败";
-          }
-          $response = [
-              'errno'=>50003,
-              'msg'=>"登录成功"
-          ];
-          return $response;
+          Redis::set($token,$data->user_id);
+
+
       }else{
-          $response = [
-              'errno'=>50004,
-              'msg'=>"登录失败"
-          ];
-          return $response;
+       echo '用户名或密码错误,请重新登录';
       }
     }
 
     public function centent(){
-        echo 124;
+        return view('cs.centent');
     }
 }

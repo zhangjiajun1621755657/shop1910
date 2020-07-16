@@ -31,6 +31,9 @@ Route::prefix('/test')->group(function(){
 
     Route::get('/rsa/send-b',"TestController@sendB"); //非对称加密
     Route::get('/rsaSign1/',"TestController@rsaSign1"); //非对称加密
+    Route::get('/encrypt',"TestController@encrypt"); //对称加密
+    Route::get('/yanqian1',"TestController@yanqian1"); //对称加密
+    Route::get('/yanqian2',"TestController@yanqian2"); //对称加密
 });
 
 
@@ -71,3 +74,5 @@ Route::post('/cs/zc2',"Cs\UserController@zc2");  //前台注册
 Route::get('/cs/login',"Cs\UserController@login");  //前台登录
 Route::post('/cs/loginDo',"Cs\UserController@loginDo");  //前台登录逻辑
 Route::post('/cs/centent',"Cs\UserController@centent");  //前台登录逻辑
+
+Route::get('/login',"\YuekaoController@login");  //前台登录
